@@ -1,0 +1,187 @@
+﻿Comparación entre el plan Flutter original y el plan React (git diff --no-index):
+diff --git "a/..\\divisor_cuenta\\specs\\001-dividir-cuenta\\plan.md" "b/specs\\001-dividir-cuenta\\plan.md"
+index 33b677c..457015a 100644
+--- "a/..\\divisor_cuenta\\specs\\001-dividir-cuenta\\plan.md"
++++ "b/specs\\001-dividir-cuenta\\plan.md"
+@@ -1,118 +1,81 @@
+-# Plan de implementación: Dividir cuenta con propina y redondeo
++# Plan de implementación: Divisor de cuenta en React
+ 
+-**Rama**: `sdd` | **Fecha**: 2026-10-01 | **Spec**: [spec.md](spec.md)
+-
+-**Entrada**: Especificación de funcionalidad en `specs/001-dividir-cuenta/spec.md`
++**Rama**: `main` | **Fecha**: 2026-10-09 | **Spec**: [spec.md](spec.md)
+ 
+ ## Resumen
+ 
+-Construir una sola pantalla que recibe monto, número de personas, porcentaje de propina y
+-modo de redondeo, valida los datos, calcula el pago individual y lo presenta con dos
+-decimales. La app funcionará sin red ni base de datos. El código se organizará en las capas
+-`presentation`, `domain` y `data`; se usará Flutter estable, sin agregar paquetes, y el
+-estado de la pantalla se administrará con `setState`.
++Recrear en React la experiencia de una sola pantalla que recibe monto, número de personas,
++porcentaje de propina y modo de redondeo; valida los datos, calcula el pago individual y
++muestra dos decimales. Se conservan las reglas, resultados y mensajes de la especificación
++Flutter. La aplicación se ejecuta localmente, sin red ni base de datos.
+ 
+ ## Contexto técnico
+ 
+-**Lenguaje/versión**: Dart con null safety; Flutter SDK estable. Entorno disponible al
+-planificar: Flutter 3.47.1 y Dart 3.13.1.
+-
+-**Dependencias principales**: Flutter SDK y dependencias ya declaradas en `pubspec.yaml`.
+-No agregar paquetes externos.
+-
+-**Almacenamiento**: Ninguno.
+-
+-**Pruebas**: `flutter_test`; pruebas unitarias de dominio para los seis escenarios y la
+-sustitución de estrategias; pruebas de widgets para los tres flujos indicados en la guía.
+-
+-**Plataforma destino**: Aplicación Flutter de una pantalla; verificación de compilación
+-Android con `flutter build apk --debug`.
+-
+-**Tipo de proyecto**: Aplicación móvil Flutter, local y sin conexión.
+-
+-**Metas de rendimiento**: El cálculo de una cuenta se ejecuta localmente al solicitarlo y
+-debe actualizar el resultado sin operaciones de red. No se requiere una meta de carga o
+-concurrencia.
+-
+-**Restricciones**: Una pantalla; sin red, base de datos ni paquetes nuevos; dependencias
+-`presentation -> domain <- data`; `lib/domain/` no importa Flutter; solo `main.dart`
+-construye implementaciones concretas.
+-
+-**Alcance**: seis escenarios de aceptación, dos estrategias de redondeo, cinco componentes
+-principales de dominio, dos implementaciones de redondeo y una pantalla con estado local.
+-
+-## Verificación de la constitución
++- **Lenguaje**: JavaScript moderno (ES modules), sin TypeScript.
++- **Interfaz y desarrollo**: React con Vite.
++- **Estado**: `useState` local; no se incorporan librerías externas de estado.
++- **Pruebas**: Vitest, Testing Library y jsdom.
++- **Persistencia y servicios**: ninguno; no hay backend, llamadas de red ni base de datos.
++- **Node.js**: se verificó v24.20.0, que satisface el mínimo de 22.12.
++- **Alcance**: una sola página, dos estrategias de redondeo, los seis escenarios de
++  aceptación, una prueba de sustitución LSP y tres pruebas de pantalla.
+ 
+-| Regla | Resultado de planificación |
+-|---|---|
+-| SRP | Validación, cálculo, redondeo, formato y presentación serán responsabilidades separadas. |
+-| OCP | `CalcularDivision` recibirá `EstrategiaRedondeo`; agregar otra estrategia no requerirá modificar el cálculo. |
+-| LSP | `RedondeoExacto` y `RedondeoHaciaArriba` implementarán el mismo contrato sustituible. |
+-| ISP | `EstrategiaRedondeo` expondrá un único método para redondear el pago individual. |
+-| DIP | El controlador dependerá de los casos de uso y la abstracción de dominio, no de las clases concretas `data`. |
+-| Capas | `presentation`, `domain` y `data`, con dependencias `presentation -> domain <- data`. |
+-| Pureza del dominio | Los archivos de `lib/domain/` solo dependerán de Dart. |
+-| Composición | `main.dart` será el único lugar que instancie implementaciones concretas. |
+-| Pruebas | Cada criterio de aceptación se representará en pruebas ejecutables. |
+-| Seguridad | No se usarán ni almacenarán secretos o claves API. |
+-| Regla de la materia | La implementación deberá poder explicarse en cuanto a propósito, entradas, salidas y errores. |
++## Decisiones de arquitectura
+ 
+-**Gate inicial**: PASS. El plan sigue las restricciones de la Constitución y el alcance de
+-la especificación; no se justifican excepciones.
+-
+-**Gate posterior al diseño**: PASS. El modelo, el contrato y la guía conservan las capas,
+-mantienen Dart puro en dominio y asignan la composición únicamente a `main.dart`.
+-
+-## Estructura del proyecto
+-
+-### Documentación de esta funcionalidad
+-
+-```text
+-specs/001-dividir-cuenta/
+-├── plan.md
+-├── research.md
+-├── data-model.md
+-├── quickstart.md
+-├── contracts/
+-│   └── pantalla-divisor.md
+-├── checklists/
+-│   ├── requirements.md
+-│   └── arquitectura.md
+-└── tasks.md
+-```
+-
+-`tasks.md` se generará en la Parte 7.3 con `/speckit-tasks`.
+-
+-### Código fuente
++Se mantienen las capas de la constitución, con JavaScript puro en el dominio y dependencias
++dirigidas desde la presentación hacia abstracciones del dominio. `main.jsx` es el único punto
++que compone las implementaciones concretas.
+ 
+ ```text
+-lib/
++src/
+ ├── domain/
+-│   ├── cuenta.dart
+-│   ├── resultado.dart
+-│   ├── estrategia_redondeo.dart
+-│   ├── calcular_division.dart
+-│   └── validar_entrada.dart
++│   ├── cuenta.js
++│   ├── resultado.js
++│   ├── estrategiaRedondeo.js
++│   ├── validarEntrada.js
++│   └── calcularDivision.js
+ ├── data/
+-│   ├── redondeo_exacto.dart
+-│   └── redondeo_hacia_arriba.dart
++│   ├── redondeoExacto.js
++│   └── redondeoHaciaArriba.js
+ ├── presentation/
+-│   ├── divisor_controller.dart
+-│   ├── formateador_moneda.dart
+-│   └── pantalla_divisor.dart
+-└── main.dart
++│   ├── useDivisor.js
++│   ├── formateadorMoneda.js
++│   └── PantallaDivisor.jsx
++└── main.jsx
+ 
+ test/
+-├── casos_de_prueba.dart
+-├── division_test.dart
+-└── pantalla_test.dart
++├── setup.js
++├── casosDePrueba.js
++├── division.test.js
++└── pantalla.test.jsx
+ ```
+ 
+-**Decisión de estructura**: Se adopta la estructura de capas de la Constitución y del
+-enunciado del plan. `main.dart` realiza la composición; `DivisorController` recibe los
+-casos de uso y la estrategia por constructor. La pantalla conserva su estado con
+-`setState`, sin incorporar paquetes de gestión de estado.
+-
+-## Complejidad
+-
+-No hay excepciones a la Constitución ni componentes adicionales a los requeridos.
++### Responsabilidades
++
++- `validarEntrada` transforma cadenas de formulario a una cuenta válida y entrega los
++  mensajes de error definidos.
++- `calcularDivision` calcula monto más propina, divide por personas y delega el redondeo a
++  una estrategia recibida; no valida ni formatea y no inspecciona tipos.
++- `redondeoExacto` conserva el valor calculado; `redondeoHaciaArriba` aplica techo al entero
++  siguiente. Ambas cumplen el contrato `aplicar(valor)`.
++- `useDivisor` recibe sus dependencias, administra el estado local del formulario y coordina
++  validación y cálculo.
++- `formateadorMoneda` convierte un resultado válido en una cadena con dos decimales.
++- `PantallaDivisor` dibuja los campos, selección de estrategia, botón y resultado o error.
++- `main.jsx` instancia dependencias concretas y entrega sus abstracciones a la presentación.
++
++## Verificación
++
++1. Ejecutar `npx vitest run test/division.test.js`: seis casos de aceptación y una prueba LSP.
++2. Ejecutar `npm test`: toda la suite, incluidos los tres flujos de pantalla.
++3. Confirmar que no hay imports de React/DOM desde `src/domain/`.
++4. Confirmar que las implementaciones concretas de redondeo solo se instancian en `src/main.jsx`.
++5. Confirmar que el cálculo no discrimina estrategias ni valida/formatea.
++6. Ejecutar `npm run build`.
++
++## Análisis de coherencia
++
++La spec copiada no prescribe Flutter, Dart ni herramientas de pruebas. Sus reglas de producto
++y seis escenarios son compatibles con la arquitectura React propuesta. La sustitución de
++Flutter/Vitest afecta al plan de implementación y runner, no a ningún enunciado de la spec.
++El análisis detallado QUÉ/CÓMO/MIXTO está en [`analisis_spec.md`](../../analisis_spec.md).
