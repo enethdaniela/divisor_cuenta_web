@@ -40,4 +40,4 @@
 - [X] T021 Ejecutar toda la suite y confirmar las tres pruebas de pantalla.
 - [X] T022 Verificar imports de dominio, composición, LSP y separación de responsabilidades.
 - [X] T023 Ejecutar `npm run build`.
-- [ ] T024 Comparar spec/casos/constitution/plan y documentar las respuestas del deber.
+- [X] T024 Comparar spec/casos/constitution/plan y documentar las respuestas del deber.

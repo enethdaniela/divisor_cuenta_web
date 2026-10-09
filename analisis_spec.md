@@ -60,8 +60,8 @@ Clasificación realizada contra
 |---|---|---|
 | SRP: cada clase tiene una razón para cambiar; cálculo no valida ni formatea | Adaptada en redacción | Cada función o módulo tiene una razón; el cálculo no valida ni formatea. JavaScript no exige clases para organizar estas responsabilidades. |
 | OCP: agregar redondeo no obliga a editar el cálculo; estrategias mediante abstracción | Adaptada en redacción | Se habla de módulos y contrato de estrategia, conservando el mismo principio. |
-| LSP: cualquier implementación sustituye a otra sin inspección del tipo concreto | Idéntica | El contrato puede cumplirse con objetos/funciones JavaScript; quien calcula no inspecciona su implementación. |
-| ISP: interfaces pequeñas y sin dependencias de métodos no usados | Idéntica | El tamaño del contrato no depende de Flutter ni React. |
+| LSP: cualquier implementación de una interfaz sustituye a otra sin inspección del tipo concreto | Adaptada en redacción | En JavaScript el contrato de redondeo se representa estructuralmente, sin interfaz Dart; quien calcula sigue sin inspeccionar la implementación. |
+| ISP: interfaces pequeñas y clases sin dependencias de métodos no usados | Adaptada en redacción | Se expresa con contratos y módulos JavaScript, conservando la regla de depender solo de lo que se usa. |
 | DIP: presentation depende de abstracciones de domain, no de data concreta | Idéntica | Se conserva la dirección de dependencias. |
 | Capas presentation, domain y data | Adaptada en redacción | Se conservan los nombres de capa; sus directorios pasan de `lib/` a `src/`. |
 | Dependencias `presentation -> domain <- data` | Idéntica | La relación entre capas no cambia. |
@@ -74,6 +74,6 @@ Clasificación realizada contra
 | Cambiar la Constitution requiere aprobación, justificación y versión semántica | Idéntica | Regla de gobernanza sin dependencia tecnológica; se conserva. |
 | Revisar el código contra la Constitution | Idéntica | La práctica de revisión sigue siendo válida. |
 
-**Conteo:** 10 reglas idénticas, 5 adaptadas en redacción y 0 reemplazadas. No se incorporó
+**Conteo:** 8 reglas idénticas, 7 adaptadas en redacción y 0 reemplazadas. No se incorporó
 ningún principio nuevo. Las adaptaciones sustituyen nombres de lenguaje, framework,
 directorios o punto de composición; no cambian la intención de las reglas.
