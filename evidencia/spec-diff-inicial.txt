@@ -1,0 +1,14 @@
+Deber 2 — Evidencia de la copia inicial de la especificación
+
+Origen:
+../divisor_cuenta/specs/001-dividir-cuenta/spec.md
+
+Destino:
+specs/001-dividir-cuenta/spec.md
+
+Comando ejecutado desde divisor_cuenta_web:
+git diff --no-index -- ..\divisor_cuenta\specs\001-dividir-cuenta\spec.md specs\001-dividir-cuenta\spec.md
+
+Resultado:
+Sin salida; código de salida 0. Los dos archivos eran idénticos inmediatamente después
+de copiar la especificación Flutter. No se ejecutó /speckit-specify.
